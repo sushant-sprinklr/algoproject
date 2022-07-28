@@ -18,13 +18,14 @@ let errorWriteApi = client.getWriteApi(org, "errorBucket", "ns");
 const queryApi = client.getQueryApi(org); //Any bucket in the db can be queried from the same queryApi
 
 const dataQuery =
-  'from(bucket:"testBucket") |> range(start: -1h) |> filter(fn: (r) => r._measurement == "measurement1")';
+  'from(bucket:"testBucket") |> range(start: -10s) |> filter(fn: (r) => r._measurement == "measurement1")';
 
 const errorQuery =
   'from(bucket: "errorBucket") |> range(start: -1d) |> filter(fn: (r) => r._measurement == "measurement1") |> mean()';
 
 let numFailures = 0;
 let total = 0;
+
 queryApi.queryRows(dataQuery, {
   next(row, tableMeta) {
     const o = tableMeta.toObject(row);
@@ -71,7 +72,16 @@ queryApi.queryRows(dataQuery, {
         console.log(point2);
         numFailures = 0;
         toCompare = true;
+        total = 0;
       },
     });
   },
 });
+
+function sleep(milliseconds) {
+  const date = Date.now();
+  let currentDate = null;
+  do {
+    currentDate = Date.now();
+  } while (currentDate - date < milliseconds);
+}
