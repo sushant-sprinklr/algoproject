@@ -19,9 +19,9 @@ const NavbarComponent = () => {
           />
         </Navbar.Brand>
 
-        <div style={{ fontWeight: "bold" }}>API Failure Platform</div>
+        <div style={{ fontWeight: "bold" }}>API Anomaly Platform</div>
         <div style={{ color: "rgba(0, 0, 0, 0)" }}>
-          API Failure Platform test
+          API Failure an Platform test
           {/* Included to ensure the text is centered */}
         </div>
       </Container>

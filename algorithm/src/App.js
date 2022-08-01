@@ -1,12 +1,11 @@
 import "./App.css";
-import BasicExample from "./components/BasicExample";
-import Navbar from "./components/NavbarComponent";
+import FormComponent from "./components/FormComponent";
+import NavbarComponent from "./components/NavbarComponent";
 function App() {
   return (
     <div className="App">
-      <Navbar />
-
-      <BasicExample />
+      <NavbarComponent />
+      <FormComponent />
     </div>
   );
 }
