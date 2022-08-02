@@ -100,6 +100,7 @@ app.get("/alert", (req, res) => {
             failures: numFailures,
             total: total,
             percentage: percentage,
+            averageErrors: output,
           });
           numFailures = 0;
           toCompare = true;

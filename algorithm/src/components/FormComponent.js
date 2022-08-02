@@ -4,8 +4,10 @@ import "./FormComponent.css";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import axios from "axios";
+import ChartComp from "./ChartComp";
 
 import { useState, useEffect } from "react";
+
 function FormComponent() {
   const [timeRange, setTimeRange] = useState(0);
   const [timeUnit, setTimeUnit] = useState("s");
@@ -14,6 +16,17 @@ function FormComponent() {
   const [btnValue, setBtnValue] = useState("Start Querying");
   const [multiplier, setMultiplier] = useState(-5);
   const [on, setOn] = useState(false);
+  const [data, setData] = useState([
+    [{ type: "timeofday", label: "Time" }, "% of Failures"],
+    [
+      [
+        new Date().getHours(),
+        new Date().getMinutes(),
+        new Date().getMilliseconds(),
+      ],
+      0,
+    ],
+  ]);
   useEffect(() => {
     if (on && multiplier > 0) {
       console.log("multiplier: ", multiplier);
@@ -26,6 +39,54 @@ function FormComponent() {
       return () => clearInterval(timeout);
     }
   }, [multiplier]);
+
+  // Call Backend function
+  const callBackend = (queryFrequency, errorRange) => {
+    console.log(queryFrequency, errorRange);
+    // Use axios to call the backend.
+
+    axios
+      .get("http://localhost:4000/alert", {
+        params: { queryFrequency: queryFrequency, errorRange: errorRange },
+      })
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.alertStatus) {
+          console.log("THERE IS AN ALERT");
+          console.log(
+            "failures: ",
+            res.data.failures,
+            "total: ",
+            res.data.total,
+            "percentage: ",
+            res.data.percentage,
+            "average Failures: ",
+            res.data.averageErrors
+          );
+        } else {
+          console.log("No alert.");
+        }
+
+        // Updating the data array
+        const percentage = res.data.percentage;
+        let current = new Date();
+        if (percentage != null) {
+          const timeOut = [
+            current.getHours(),
+            current.getMinutes(),
+            current.getMilliseconds(),
+          ];
+          let copyData = data;
+          copyData.push([timeOut, percentage]);
+
+          setData(copyData);
+        }
+      })
+      .catch((err) => {
+        // error found
+        console.log(err);
+      });
+  };
 
   return (
     <Form className="d-flex flex-column justify-content-center  align-items-center">
@@ -80,7 +141,6 @@ function FormComponent() {
           Set the error query range:
         </Col>
       </Row>
-
       <Row>
         <Col>
           <Form.Group className="Form-group d-flex justify-content-end">
@@ -156,55 +216,13 @@ function FormComponent() {
             setOn(false);
             setMultiplier(-5);
           }
-          // if (timeUnit === "ms") {
-          //   multiplier = 1;
-          // } else if (timeUnit === "s") {
-          //   multiplier = 1000;
-          // } else if (timeUnit === "m") {
-          //   multiplier = 1000 * 60;
-          // } else if (timeUnit === "h") {
-          //   multiplier = 1000 * 60 * 60;
-          // } else if (timeUnit === "d") {
-          //   multiplier = 1000 * 60 * 60 * 24;
-          // } else if (timeUnit === "w") {
-          //   multiplier = 1000 * 60 * 60 * 24 * 7;
-          // }
-          // multiplier = multiplier * timeRange;
         }}
       >
         {btnValue}
       </Button>
+      <ChartComp data={data} />
     </Form>
   );
 }
-
-const callBackend = (queryFrequency, errorRange) => {
-  console.log(queryFrequency, errorRange);
-  // Use axios to call the backend.
-  axios
-    .get("http://localhost:4000/alert", {
-      params: { queryFrequency: queryFrequency, errorRange: errorRange },
-    })
-    .then((res) => {
-      console.log(res.data);
-      if (res.data.alertStatus) {
-        console.log("THERE IS AN ALERT");
-        console.log(
-          "failures: ",
-          res.data.failures,
-          "total: ",
-          res.data.total,
-          "percentage: ",
-          res.data.percentage
-        );
-      } else {
-        console.log("No alert.");
-      }
-    })
-    .catch((err) => {
-      // error found
-      console.log(err);
-    });
-};
 
 export default FormComponent;

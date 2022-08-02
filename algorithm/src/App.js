@@ -6,6 +6,7 @@ function App() {
     <div className="App">
       <NavbarComponent />
       <FormComponent />
+      {/* <ChartComp /> */}
     </div>
   );
 }
