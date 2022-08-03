@@ -84,8 +84,8 @@ function FormComponent() {
   };
 
   return (
-    <div className="d-flex">
-      <Form className="d-flex flex-column justify-content-center  align-items-center">
+    <div className="verticalClass horizontalClass justify-content-start">
+      <Form className="d-flex flex-column justify-content-center align-items-center">
         <Row style={{ marginTop: "15px" }}>
           <Col style={{ fontWeight: "bold", fontSize: "15px" }}>
             Set the API query range:
