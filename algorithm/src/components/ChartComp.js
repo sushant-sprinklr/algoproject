@@ -6,12 +6,13 @@ const ChartComp = (props) => {
     title: "% of Failures vs Time",
     hAxis: { title: "Time", viewWindow: { min: 0 } },
     vAxis: { title: "% of Failures", viewWindow: { min: 0 } },
-    legend: "none",
+    legend: "right",
   };
   if (props.data == null) {
     console.log("ERROR");
   } else {
-    console.log(props.data);
+    console.log("passed data is", props.data);
+    // console.log("new chart");
   }
   return (
     <Chart
