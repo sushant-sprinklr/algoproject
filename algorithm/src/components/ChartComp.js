@@ -11,8 +11,6 @@ const ChartComp = (props) => {
   if (props.data == null) {
     console.log("ERROR");
   } else {
-    console.log("passed data is", props.data);
-    // console.log("new chart");
   }
   return (
     <Chart

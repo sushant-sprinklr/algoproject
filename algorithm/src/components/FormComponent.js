@@ -207,10 +207,12 @@ function FormComponent() {
             if (btnValue === "Start Querying") {
               setBtnValue("Stop Querying");
               setOn(true);
+              console.log("Started Querying");
             } else {
               setBtnValue("Start Querying");
               setOn(false);
               setMultiplier(-5);
+              console.log("Stopped Querying");
             }
           }}
         >

@@ -27,7 +27,6 @@ app.get("/alert", (req, res) => {
   console.log("request is: ", req.query);
   const queryFrequency = "-" + req.query.queryFrequency;
   const errorRange = "-" + req.query.errorRange;
-  const measureName = req.query.queryFrequency;
 
   console.log("here: ", queryFrequency, errorRange);
 
@@ -35,7 +34,7 @@ app.get("/alert", (req, res) => {
 
   const dataQuery = `from(bucket:"testBucket") |> range(start: ${queryFrequency}) |> filter(fn: (r) => r._measurement == "measurement1")`;
 
-  const errorQuery = `from(bucket: "errorBucket") |> range(start: ${errorRange}) |> filter(fn: (r) => r._measurement == "${measureName}") |> mean()`;
+  const errorQuery = `from(bucket: "errorBucket") |> range(start: ${errorRange}) |> filter(fn: (r) => r._measurement == "measurement1") |> mean()`;
 
   let numFailures = 0;
   let total = 0;
@@ -84,7 +83,7 @@ app.get("/alert", (req, res) => {
             alertStatus = true;
           }
           if (total != 0) {
-            let point2 = new Point(measureName).floatField(
+            let point2 = new Point("measurement1").floatField(
               "errors",
               percentage
             );

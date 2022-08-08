@@ -7,22 +7,33 @@ import Row from "react-bootstrap/esm/Row";
 import { useState, useEffect } from "react";
 function App() {
   const [forms, setForms] = useState([]);
-  const [toRemove, setToRemove] = useState(false);
-  const [currKey, setCurrKey] = useState(-1);
+  // const [toRemove, setToRemove] = useState(false);
+  // const [currKey, setCurrKey] = useState(-1);
 
-  useEffect(() => {
-    if (toRemove) {
-      setForms((products) => products.filter((_, index) => index !== 0));
-      setToRemove(false);
-    }
-  }, [toRemove, forms, currKey]);
+  const removeCurrListener = (currentKey) => {
+    console.log("At this point, forms is: ", forms);
+  };
+  // useEffect(() => {
+  //   if (toRemove && currKey > 0) {
+  //     console.log("forms is: ", forms);
+  //     let copy = forms;
+  //     copy.splice(currKey, 1);
+  //     setForms(copy);
+  //     setToRemove(false);
+  //     setCurrKey(-1);
+  //     console.log("Updated arr is: ", copy);
+  //     console.log("updated forms is: ", forms);
+  //   }
+  // }, [toRemove]);
 
   const addForm = () => {
     const newElement = (
       <Row className="d-flex justify-content-center" key={forms.length}>
         <FormComponent />
         <Button
+          key={forms.length}
           variant="danger"
+          type="submit"
           value={forms.length}
           style={{
             maxWidth: "180px",
@@ -30,9 +41,16 @@ function App() {
             marginBottom: "10px",
           }}
           onClick={(props) => {
+            props.preventDefault();
             const currentKey = props.target.getAttribute("value");
-            setToRemove(true);
-            setCurrKey(currentKey);
+            // console.log("Current key is: ", currentKey);
+            // console.log("before removing: ", forms);
+            removeCurrListener(currentKey);
+            // setCurrKey(currentKey);
+            // setToRemove(true);
+
+            // console.log(arr);
+            // setForms((oldArray) => [oldArray.splice(currentKey, 1)]);
           }}
         >
           Remove Listener
@@ -40,7 +58,11 @@ function App() {
         <hr style={{ color: "blue" }} />
       </Row>
     );
+
+    // add a form to the forms array.
+    // setForms((oldArr) => [...oldArr, newElement]);
     setForms((oldArray) => [...oldArray, newElement]);
+    console.log("AFTER ADDING NEW ELEMENT: ", forms);
   };
 
   return (
