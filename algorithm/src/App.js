@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/esm/Container";
 import Row from "react-bootstrap/esm/Row";
 import { useState, useEffect } from "react";
+let keyVal = 0;
 function App() {
   const [forms, setForms] = useState([]);
   const [toRemove, setToRemove] = useState(false);
@@ -12,18 +13,22 @@ function App() {
 
   useEffect(() => {
     if (toRemove) {
-      setForms((products) => products.filter((_, index) => index !== 0));
+      setForms((products) =>
+        products.filter((el, index) => {
+          return el.key != currKey;
+        })
+      );
       setToRemove(false);
     }
   }, [toRemove, forms, currKey]);
 
   const addForm = () => {
     const newElement = (
-      <Row className="d-flex justify-content-center" key={forms.length}>
+      <Row className="d-flex justify-content-center" key={keyVal}>
         <FormComponent />
         <Button
           variant="danger"
-          value={forms.length}
+          value={keyVal}
           style={{
             maxWidth: "180px",
             marginTop: "10px",
@@ -40,6 +45,7 @@ function App() {
         <hr style={{ color: "blue" }} />
       </Row>
     );
+    keyVal++;
     setForms((oldArray) => [...oldArray, newElement]);
   };
 
@@ -58,12 +64,8 @@ function App() {
               marginBottom: "10px",
             }}
             onClick={(event) => {
-              // event.preventDefault();
               addForm();
               console.log("New listener added");
-              const key = forms.length;
-              console.log("key", key);
-              // call the function to add a form.
             }}
           >
             Add Listener
