@@ -8,7 +8,7 @@ import ChartComp from "./ChartComp";
 
 import { useState, useEffect } from "react";
 
-function FormComponent() {
+function FormComponent({ formTarget }) {
   const [timeRange, setTimeRange] = useState(0);
   const [timeUnit, setTimeUnit] = useState("s");
   const [errorTimeRange, setErrorTimeRange] = useState(0);
@@ -16,6 +16,7 @@ function FormComponent() {
   const [btnValue, setBtnValue] = useState("Start Querying");
   const [multiplier, setMultiplier] = useState(-5);
   const [on, setOn] = useState(false);
+
   const [data, setData] = useState([
     [{ type: "string", label: "Time" }, "% of Failures", "Average Failure %"],
     [[new Date().toLocaleTimeString()], 0, 0],
@@ -55,6 +56,7 @@ function FormComponent() {
             "average Failures: ",
             res.data.averageErrors
           );
+          alert("There is an anomalous reading");
         } else {
           console.log("No alert.");
         }
@@ -177,9 +179,11 @@ function FormComponent() {
             </Form.Group>
           </Col>
         </Row>
+
         <Button
           variant="primary"
           type="submit"
+          style={{ marginTop: "10px" }}
           onClick={(event) => {
             event.preventDefault();
 
